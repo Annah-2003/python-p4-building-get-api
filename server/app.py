@@ -1,5 +1,7 @@
 # app/app.py
 
+#!/usr/bin/env python3
+
 from flask import Flask, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -36,6 +38,21 @@ def games():
         jsonify(games),
         200
     )
+    response.headers["Content-Type"] = "application/json"
+
+    return response
+
+@app.route('/games/<int:id>')
+def game_by_id(id):
+    game = Game.query.filter_by(id=id).first()
+
+    game_dict = game.to_dict()
+
+    response = make_response(
+        jsonify(game_dict),
+        200
+    )
+    response.headers["Content-Type"] = "application/json"
 
     return response
 
